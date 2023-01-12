@@ -1,0 +1,97 @@
+.btnOne {
+  cursor: pointer;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: gold;
+  font-family: sans-serif;
+  box-shadow: inset 0 -2px 3px 0 black, inset 0 2px 3px 0 white;
+  text-shadow: 1px 1px 2px black, 0 0 1em black, 0 0 0.2em black;
+  height: 30px;
+  line-height: 30px;
+
+  &:active {
+    box-shadow: inset 0 -1px 3px 0 black, inset 0 1px 3px 0 rgb(122, 121, 121);
+    color: rgb(197, 167, 2);
+  }
+
+  &:hover{
+    color: rgb(168, 255, 55);
+  }
+
+  &::after {
+    display: block;
+    content: "";
+    position: relative;
+    box-shadow: inset 0 2px 2px 0 black, inset 0 -2px 2px 0 white;
+    border-radius: 6px;
+    left: -2px;
+    top: -34px;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+  }
+}
+
+.conts {
+  display: flex;
+  justify-content: space-between;
+  height: 38px;
+  width: 100%;
+  // background-color: rgb(35, 165, 188);
+  padding: 4px;
+}
+
+.inputChange{
+  background-color: rgb(230, 228, 238);
+  width: 50%;
+  border-radius: 5px;
+}
+
+.colorChange{
+  background-color: #fff;
+  width: 17%;
+  border-radius: 5px;
+}
+
+.btnChange{
+  background-color: rgb(147, 40, 40);
+  width: 28%;
+  border-radius: 5px;
+}
+
+.changeContainer {
+  margin: 20px 0 0 30px;
+  width: 600px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  
+  .bottomCont {
+
+    .raceBtn {
+      width: 24%;
+      border-radius: 5px;
+    }
+    .resetBtn {
+      width: 24%;
+      border-radius: 5px;
+    }
+    .genCarsBtn {
+      width: 48%;
+      border-radius: 5px;
+      content: "Generate Cars";
+    }
+  }
+}
+
+.titlePage{
+  color: white;
+  font-size: 150%;
+  margin: 50px 0 0 30px;
+}
+
+.pageNum{
+  color: white;
+  font-size: 120%;
+  margin: 10px 0 0 30px;
+}

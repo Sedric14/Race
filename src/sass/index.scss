@@ -1,0 +1,28 @@
+@import "nullStyle.scss";
+
+body{
+  background-color: rgb(50, 50, 50);
+}
+
+.headerBtnContainer {
+  margin: 20px 0 0 30px;
+  width: 220px;
+  // padding: 20px;
+  background-color: rgba(32, 126, 34, 0.099);
+  display: flex;
+  justify-content: space-between;
+
+  .headerBtn {
+    width: 100px;
+    height: 30px;
+    background-color: rgb(145, 37, 37);
+    border-radius: 5px;
+    color: aliceblue;
+    text-align: center;
+    line-height: 30px;
+
+  }
+}
+
+@import "changeBlock.scss";
+@import "carBlock.scss";

@@ -1,40 +1,45 @@
-// /* eslint-disable no-useless-constructor */
-// /* eslint-disable import/extensions */
-// /* eslint-disable import/no-unresolved */
+/* eslint-disable no-useless-constructor */
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
 // import Component from "../app/components";
-// // import { PageIds } from "../app/app";
+// import { PageIds } from "../app/app";
 
-// const Buttons = [
-//   {
-//     id: "garage",
-//     text: "GARAGE",
-//   },
-//   {
-//     id: "winners",
-//     text: "WINNERS",
-//   },
-// ];
+const Buttons = [
+  {
+    id: "garage",
+    text: "GARAGE",
+  },
+  {
+    id: "winners",
+    text: "WINNERS",
+  },
+];
 
-// class Header extends Component {
-//   constructor(tagName: string, className: string) {
-//     super(tagName, className);
-//   }
+class Header {
+  protected container: HTMLElement;
 
-//   renderPageButtons() {
-//     const pageButtons = document.createElement("div");
-//     Buttons.forEach((button) => {
-//       const buttonHTML = document.createElement("a");
-//       buttonHTML.href = `#${button.id}`;
-//       buttonHTML.innerText = button.text;
-//       pageButtons.append(buttonHTML);
-//     });
-//     this.container.append(pageButtons);
-//   }
+  constructor(tagName: string, className: string) {
+    this.container = document.createElement(tagName);
+    this.container.className = className;
+  }
 
-//   render() {
-//     this.renderPageButtons();
-//     return super.container;
-//   }
-// }
+  renderPageButtons() {
+    const pageButtons = document.createElement("div");
+    pageButtons.className = "headerBtnContainer"
+    Buttons.forEach((button) => {
+      const buttonHTML = document.createElement("a");
+      buttonHTML.className = "headerBtn btnOne";
+      buttonHTML.href = `#${button.id}`;
+      buttonHTML.innerText = button.text;
+      pageButtons.append(buttonHTML);
+    });
+    this.container.append(pageButtons);
+  }
 
-// export default Header;
+  render() {
+    this.renderPageButtons();
+    return this.container;
+  }
+}
+
+export default Header;
