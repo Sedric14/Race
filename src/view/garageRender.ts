@@ -56,17 +56,22 @@ class GaragePage extends Page {
     btnBlock.className = "btnBlock";
     const selectBtn = document.createElement("div");
     selectBtn.className = "selectBtn btnOne btn";
+    selectBtn.textContent = "SELECT";
     const removeBtn = document.createElement("div");
     removeBtn.className = "removeBtn btnOne btn";
+    removeBtn.textContent = "REMOVE";
     const nameCar = document.createElement("p");
     nameCar.className = "nameCar";
+    nameCar.textContent = "Tesla";
     btnBlock.append(selectBtn, removeBtn, nameCar);
     const bottomBlock = document.createElement("div");
     bottomBlock.className = "bottomBlock";
     const btnA = document.createElement("div");
     btnA.className = "btnA letter";
+    btnA.textContent = "A";
     const btnB = document.createElement("div");
     btnB.className = "btnB letter";
+    btnB.textContent = "B"
     const car = document.createElement("div");
     car.className = "car";
     const flag = document.createElement("div");
