@@ -1,0 +1,76 @@
+.carBlock {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 2px wheat dotted;
+  top: 50px;
+
+  .btnBlock {
+    width: 50%;
+    height: 50px;
+    display: flex;
+    justify-content: start;
+
+    .selectBtn {
+      width: 80px;
+      margin-left: 30px;
+    }
+
+    .removeBtn {
+      width: 80px;
+      margin-left: 10px;
+    }
+
+    .nameCar{
+      color: aquamarine;
+      margin-left: 25px;
+      font-size: 120%;
+      line-height: 30px;
+    }
+  }
+
+  .bottomBlock {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    display: flex;
+
+    .letter{
+      width: 30px;
+      height: 30px;
+      border: 2px solid gold;
+      border-radius: 5px;
+      text-align: center;
+      line-height: 25px;
+      color: gold;
+      font-weight: 600;
+      font-family: sans-serif;
+    }
+
+    .btnA{
+      margin-left: 30px;
+    }
+
+    .btnB{
+      margin-left: 5px;
+    }
+
+    .car{
+      width: 110px;
+      height: 50px;
+      background: url("https://raw.githubusercontent.com/Sedric14/assets/main/race/car.svg");
+      background-size: cover;
+      margin-left: 10px;
+    }
+
+    .flag{
+      position: absolute;
+      right: 150px;
+      height: 50px;
+      width: 50px;
+      background: url("https://raw.githubusercontent.com/Sedric14/assets/main/race/race_logo.png");
+      background-size: cover;
+    }
+  }
+}

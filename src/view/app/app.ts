@@ -3,7 +3,7 @@
 import ErrorPage, { ErrorTypes } from "../errorRender";
 import GaragePage from "../garageRender";
 import WinnersPage from "../winnerRender";
-// import Header from "./header";
+import Header from "./header";
 import Page from "./page";
 
 // export const PageIds = {
@@ -12,11 +12,11 @@ import Page from "./page";
 // };
 
 class App {
-  private static container: HTMLElement = document.body;
+  private static bodyContainer: HTMLElement = document.body;
 
   private static defaultPageId = "current-page";
 
-  // private header: Header;
+  private header: Header;
 
   static renderNewPage(idPage: string) {
     const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
@@ -36,7 +36,7 @@ class App {
     if (page) {
       const pageHTML = page.render();
       pageHTML.id = App.defaultPageId;
-      App.container.append(pageHTML);
+      App.bodyContainer.append(pageHTML);
     }
   }
 
@@ -47,12 +47,12 @@ class App {
     });
   }
 
-  // constructor() {
-  //   // this.header = new Header("header", "header-container");
-  // }
+  constructor() {
+    this.header = new Header("header", "headerButton");
+  }
 
-  static run() {
-    // App.container.append(this.header.render());
+  run() {
+    App.bodyContainer.append(this.header.render());
     App.renderNewPage("garage");
     App.enableRouteChange();
   }
