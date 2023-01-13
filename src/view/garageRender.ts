@@ -1,5 +1,6 @@
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
+import Listeners from "../controller/Listeners";
 import Page from "./app/page";
 
 class GaragePage extends Page {

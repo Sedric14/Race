@@ -1,5 +1,6 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/extensions */
+import Listeners from "../../controller/Listeners";
 import ErrorPage, { ErrorTypes } from "../errorRender";
 import GaragePage from "../garageRender";
 import WinnersPage from "../winnerRender";
@@ -37,6 +38,7 @@ class App {
       const pageHTML = page.render();
       pageHTML.id = App.defaultPageId;
       App.bodyContainer.append(pageHTML);
+      Listeners.create();
     }
   }
 
