@@ -1,6 +1,8 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/extensions */
 import Listeners from "../../controller/Listeners";
+import Crud from "../../model/CrudServices";
+import Services from "../../model/Services";
 import ErrorPage, { ErrorTypes } from "../errorRender";
 import GaragePage from "../garageRender";
 import WinnersPage from "../winnerRender";
@@ -18,8 +20,10 @@ class App {
   private static defaultPageId = "current-page";
 
   private header: Header;
+  
 
   static renderNewPage(idPage: string) {
+    const carCount = Crud.getAllCar().then(i => i.length)
     const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
     if (currentPageHTML) {
       currentPageHTML.remove();
