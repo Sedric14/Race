@@ -5,6 +5,8 @@ import Crud from "../model/CrudServices";
 import { car } from "../model/Interfaces";
 import App from "./app/app";
 import Page from "./app/page";
+import Services from "../model/Services"
+import CrudServices from "../model/CrudServices";
 
 class GaragePage extends Page {
   static carImage = "https://raw.githubusercontent.com/Sedric14/assets/main/race/car.svg";
@@ -13,7 +15,7 @@ class GaragePage extends Page {
   static createHeaderTitle(text: string) {
     const headerTitle = document.createElement("h1");
     headerTitle.textContent = `${text}`;
-    headerTitle.className = "titlePage";
+    headerTitle.className = "titlePage garageTitle";
     return headerTitle;
   }
 
@@ -58,7 +60,7 @@ class GaragePage extends Page {
     return changeContainer;
   }
 
-  private static createCarBlock(name: string, color: string, id: number) {
+  private static createCarBlock(i:car) {
     const carBlock = document.createElement("div");
     carBlock.className = "carBlock";
     const btnBlock = document.createElement("div");
@@ -66,32 +68,33 @@ class GaragePage extends Page {
     const selectBtn = document.createElement("div");
     selectBtn.className = "selectBtn btnOne btn";
     selectBtn.textContent = "SELECT";
+    selectBtn.addEventListener("click", () => {Services.update(i)})
     const removeBtn = document.createElement("div");
     removeBtn.className = "removeBtn btnOne btn";
     removeBtn.textContent = "REMOVE";
     removeBtn.addEventListener("click", () => {
-      Crud.deleteCar(id)
+      Crud.deleteCar(i.id as number)
     });
     const nameCar = document.createElement("p");
     nameCar.className = "nameCar";
-    nameCar.textContent = name;
+    nameCar.textContent = i.name;
     btnBlock.append(selectBtn, removeBtn, nameCar);
     const bottomBlock = document.createElement("div");
     bottomBlock.className = "bottomBlock";
     const btnA = document.createElement("div");
-    btnA.className = "btnA letter";
+    btnA.className = "btnA letter activeBtn";
     btnA.textContent = "A";
+    btnA.id = `btnA${i.id}`;
+    btnA.addEventListener("click", () =>{Services.runAnim(i.id as number, "started")});
     const btnB = document.createElement("div");
-    btnB.className = "btnB letter";
-    btnB.textContent = "B"
-    // const car2 = document.createElement("object");
-    // car2.data = `src/assets/svg/car.svg`;
-    // car2.type = "image/svg+xml";
-    // car2.style.fill = `${color}`;
-    // car2.className = "car"
+    btnB.className = "btnB letter disactiveBtn";
+    btnB.textContent = "B";
+    btnB.id = `btnB${i.id}`;
+    btnB.addEventListener("click", () =>{Services.runAnim(i.id as number, "stopped")});
     const car = document.createElement("div");
     car.className = "car";
-    car.style.backgroundColor = `${color}`
+    car.id = `car${i.id}`
+    car.style.backgroundColor = `${i.color}`
     const flag = document.createElement("div");
     flag.className = "flag";
     bottomBlock.append(btnA, btnB, car, flag)
@@ -112,28 +115,33 @@ class GaragePage extends Page {
     return prewNextBlock;
   }
 
-  render() {
-      // GaragePage.page = Number(sessionStorage.getItem("page"));
-    
-    let carCount = 0;
+  private static createCarsList(){
     const carBlockContainer = document.createElement("div");
     carBlockContainer.className = "carBlockContainer";
     let allCar = Crud.getAllCar();
     allCar.then((el) => {
-      carCount = el.length;
-      const title = document.querySelector(".titlePage")
+      let carCount = el.length;
+      const title = document.querySelector(".garageTitle")
       if (title) title.textContent = `GARAGE (${carCount})`;
-      // if(sessionStorage.getItem("page")) GaragePage.page = Number(sessionStorage.getItem("garagePage"));
       el.forEach((i, ind) => {
-        if(ind >= (GaragePage.page * 10) && ind < ((GaragePage.page + 1) * 10)){
-          carBlockContainer.append(GaragePage.createCarBlock(i.name, i.color, i.id as number));
+        if(ind >= (GaragePage.page * 7) && ind < ((GaragePage.page + 1) * 7)){
+          carBlockContainer.append(GaragePage.createCarBlock(i));
         }
       })
     })
+    return carBlockContainer;
+  }
+
+  private static createPageNum(){
     const pageNum = document.createElement("p");
     pageNum.className = "pageNum";
-    // if(sessionStorage.getItem("page")) GaragePage.page = Number(sessionStorage.getItem("page")) + 1;
     pageNum.textContent = `page #${GaragePage.page + 1}`;
+    return pageNum;
+  }
+
+  render() {
+    const carBlockContainer = GaragePage.createCarsList();
+    const pageNum = GaragePage.createPageNum();
     const title = GaragePage.createHeaderTitle(`GARAGE`);
     const changeContainer = GaragePage.createChangeContainer();
     const prewNext = GaragePage.createPrewNext();

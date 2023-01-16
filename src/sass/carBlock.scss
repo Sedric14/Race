@@ -40,6 +40,7 @@
     display: flex;
 
     .letter {
+      cursor: pointer;
       width: 30px;
       height: 30px;
       border: 2px solid gold;
@@ -51,6 +52,15 @@
       font-family: sans-serif;
     }
 
+    .disactiveBtn{
+      margin-top: 2.5px;
+      cursor: default;
+      width: 25px;
+      height: 25px;
+      border: 2px solid rgb(108, 92, 2);
+      color: rgb(108, 92, 2);
+    }
+
     .btnA {
       margin-left: 30px;
     }
@@ -60,12 +70,11 @@
     }
 
     .car {
+      position: relative;
       width: 110px;
       height: 50px;
-      // background:  #f0f;
       background-size: cover;
       margin-left: 10px;
-      // background-color: red;
       -webkit-mask-image: url("https://raw.githubusercontent.com/Sedric14/assets/main/race/car.svg");
       mask-image: url("https://raw.githubusercontent.com/Sedric14/assets/main/race/car.svg");
       -webkit-mask-size: cover;

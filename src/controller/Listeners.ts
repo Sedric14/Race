@@ -1,9 +1,13 @@
 import Crud from "../model/CrudServices";
+import { car } from "../model/Interfaces";
 import Services from "../model/Services";
 import App from "../view/app/app";
 import GaragePage from "../view/garageRender";
 
 class Listeners {
+
+static updatingCar: car;
+
   public static create(): void {
 
     const btnTopCont = document.querySelector(".btnTopCont");
@@ -13,7 +17,7 @@ class Listeners {
 
     const btnMiddleCont = document.querySelector(".btnMiddleCont");
     btnMiddleCont?.addEventListener("click", () => {
-      Services.update(5)
+      Crud.updateCar()
     });
 
     const genCars = document.querySelector(".genCarsBtn");
@@ -33,12 +37,15 @@ class Listeners {
     next?.addEventListener("click", () => {
       let allCar = Crud.getAllCar();
       allCar.then((el) => {
-        if (Math.ceil(el.length / 10) > (GaragePage.page + 1)) GaragePage.page += 1;
+        if (Math.ceil(el.length / 7) > (GaragePage.page + 1)) GaragePage.page += 1;
         const pageNum = document.querySelector(".pageNum") as HTMLElement
         pageNum.textContent = `page #${GaragePage.page + 1}`;
       })
       App.renderNewPage("garage");
     });
+
+    const raceBtn = document.querySelector(".raceBtn");
+    raceBtn?.addEventListener("click", Services.startRace);
   }
 }
 
