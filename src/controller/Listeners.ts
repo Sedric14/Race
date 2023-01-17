@@ -6,23 +6,25 @@ import GaragePage from "../view/garageRender";
 
 class Listeners {
 
-static updatingCar: car;
+  static updatingCar: car;
 
   public static create(): void {
-
     const btnTopCont = document.querySelector(".btnTopCont");
     btnTopCont?.addEventListener("click", () => {
-      Services.create()
+      Services.create();
+      Services.updateGaragePage()
     });
 
     const btnMiddleCont = document.querySelector(".btnMiddleCont");
     btnMiddleCont?.addEventListener("click", () => {
-      Crud.updateCar()
+      Crud.updateCar();
+      Services.updateGaragePage()
     });
 
     const genCars = document.querySelector(".genCarsBtn");
     genCars?.addEventListener("click", () => {
       Services.generateCars()
+      Services.updateGaragePage()
     });
 
     const prew = document.querySelector(".prew");
@@ -30,7 +32,7 @@ static updatingCar: car;
       if (GaragePage.page > 0) GaragePage.page -= 1;
       const pageNum = document.querySelector(".pageNum") as HTMLElement
       pageNum.textContent = `page #${GaragePage.page + 1}`;
-      App.renderNewPage("garage");
+      Services.updateGaragePage()
     });
 
     const next = document.querySelector(".next");
@@ -41,7 +43,7 @@ static updatingCar: car;
         const pageNum = document.querySelector(".pageNum") as HTMLElement
         pageNum.textContent = `page #${GaragePage.page + 1}`;
       })
-      App.renderNewPage("garage");
+      Services.updateGaragePage()
     });
 
     const raceBtn = document.querySelector(".raceBtn");

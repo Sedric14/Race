@@ -37,7 +37,6 @@ class Crud {
       },
       body: JSON.stringify(car)
     });
-    App.renderNewPage("garage")
   }
 
   public static async updateCar() {
@@ -55,7 +54,6 @@ class Crud {
       },
       body: JSON.stringify(car)
     });
-    App.renderNewPage("garage")
   }
 
   public static async getAllCar() {
@@ -71,7 +69,7 @@ class Crud {
         'Content-Type': 'application/json; charset=utf-8'
       },
     });
-    App.renderNewPage("garage")
+    Services.updateGaragePage()
   }
 
   public static async getAllWinners() {

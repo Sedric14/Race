@@ -15,7 +15,7 @@ import Page from "./page";
 // };
 
 class App {
-  private static bodyContainer: HTMLElement = document.body;
+  public static bodyContainer: HTMLElement = document.body;
 
   private static defaultPageId = "current-page";
 
@@ -23,27 +23,24 @@ class App {
   
 
   static renderNewPage(idPage: string) {
-    const carCount = Crud.getAllCar().then(i => i.length)
-    const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
-    if (currentPageHTML) {
-      currentPageHTML.remove();
-    }
-    let page: Page | null = null;
+    const gPage = document.getElementById("garage");
+    const wPage = document.getElementById("winners");
+    const errPage = document.getElementById("error");
 
     if (idPage === "garage") {
-      page = new GaragePage(idPage);
+      if(gPage) gPage.style.display = "block";
+      if(wPage) wPage.style.display = "none";
+      if(errPage) errPage.style.display = "none";
     } else if (idPage === "winners") {
-      page = new WinnersPage(idPage);
+      if(gPage) gPage.style.display = "none";
+      if(wPage) wPage.style.display = "block";
+      if(errPage) errPage.style.display = "none";
     } else {
-      page = new ErrorPage(idPage, ErrorTypes.Error_404);
+      if(gPage) gPage.style.display = "none";
+      if(wPage) wPage.style.display = "none";
+      if(errPage) errPage.style.display = "block";
     }
-
-    if (page) {
-      const pageHTML = page.render();
-      pageHTML.id = App.defaultPageId;
-      App.bodyContainer.append(pageHTML);
       Listeners.create();
-    }
   }
 
   private static enableRouteChange() {
@@ -58,7 +55,20 @@ class App {
   }
 
   run() {
+    App.bodyContainer.replaceChildren();
     App.bodyContainer.append(this.header.render());
+    const garagePage = new GaragePage("garage");
+    const winnerPage = new WinnersPage("winners");
+    const errorPage = new ErrorPage("", ErrorTypes.Error_404);
+    const errPage = errorPage.render();
+    errPage.id = "error";
+    errPage.style.display = "none";
+    const gPage = garagePage.render();
+    gPage.id = "garage";
+    const wPage = winnerPage.render();
+    wPage.id = "winners";
+    wPage.style.display = "none";
+    App.bodyContainer.append(gPage, wPage, errPage)
     App.renderNewPage("garage");
     App.enableRouteChange();
   }

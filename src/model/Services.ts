@@ -11,7 +11,12 @@ class Services {
 
   static garagePage = new GaragePage("garage");
 
-  public static async create() {
+  public static updateGaragePage(){
+    const app = new App();
+    app.run()
+  }
+
+  public static create() {
     const inputName = document.querySelector(".inputTopCont") as HTMLInputElement;
     const inputColor = document.querySelector(".colorTopCont") as HTMLInputElement;
     const name = inputName.value;
@@ -24,7 +29,7 @@ class Services {
     Crud.createCar(car);
   }
 
-  public static async update(car: car) {
+  public static update(car: car) {
     const inputName = document.querySelector(".inputMiddleCont") as HTMLInputElement;
     const inputColor = document.querySelector(".colorMiddleCont") as HTMLInputElement;
     inputName.value = car.name;
