@@ -72,9 +72,7 @@ class GaragePage extends Page {
     const removeBtn = document.createElement("div");
     removeBtn.className = "removeBtn btnOne btn";
     removeBtn.textContent = "REMOVE";
-    removeBtn.addEventListener("click", () => {
-      Crud.deleteCar(i.id as number)
-    });
+    removeBtn.addEventListener("click", () => { Crud.deleteCar(i.id as number)});
     const nameCar = document.createElement("p");
     nameCar.className = "nameCar";
     nameCar.textContent = i.name;
@@ -85,12 +83,12 @@ class GaragePage extends Page {
     btnA.className = "btnA letter activeBtn";
     btnA.textContent = "A";
     btnA.id = `btnA${i.id}`;
-    btnA.addEventListener("click", () =>{Services.runAnim(i.id as number, "started")});
+    btnA.addEventListener("click", () =>{Services.runAnim(i.id as number, "started", "A")});
     const btnB = document.createElement("div");
     btnB.className = "btnB letter disactiveBtn";
     btnB.textContent = "B";
     btnB.id = `btnB${i.id}`;
-    btnB.addEventListener("click", () =>{Services.runAnim(i.id as number, "stopped")});
+    btnB.addEventListener("click", () =>{Services.runAnim(i.id as number, "stopped", "B")});
     const car = document.createElement("div");
     car.className = "car";
     car.id = `car${i.id}`

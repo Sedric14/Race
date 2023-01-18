@@ -14,3 +14,8 @@ export interface engine{
     velocity: number,
     distance: number,
   }
+
+  export interface body{
+    time: number,
+    wins: number,
+  }

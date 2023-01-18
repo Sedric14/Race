@@ -1,7 +1,7 @@
 import Listeners from "../controller/Listeners";
 import App from "../view/app/app";
 import GaragePage from "../view/garageRender";
-import { car, engine, winner } from "./Interfaces";
+import { body, car, engine, winner } from "./Interfaces";
 import Services from "./Services";
 
 class Crud {
@@ -56,6 +56,16 @@ class Crud {
     });
   }
 
+  public static async updateWin(id: number, body: body) {
+    const response = await fetch(`${Crud.baseUrl}${Crud.path.winners}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+  }
+
   public static async getAllCar() {
     const response = await fetch(`${Crud.baseUrl}${Crud.path.garage}`);
     let result = await response.json() as car[];
@@ -69,7 +79,17 @@ class Crud {
         'Content-Type': 'application/json; charset=utf-8'
       },
     });
-    Services.updateGaragePage()
+    Services.updateGaragePage();
+    Crud.deleteWin(id);
+  }
+
+  public static async deleteWin(id: number) {
+    const response = await fetch(`${Crud.baseUrl}${Crud.path.winners}/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+    });
   }
 
   public static async getAllWinners() {
@@ -82,6 +102,22 @@ class Crud {
     const response = await fetch(`${Crud.baseUrl}${Crud.path.garage}/${id}`);
     let result = await response.json() as car;
     return result;
+  }
+
+  public static async getWin(id: number) {
+    const response = await fetch(`${Crud.baseUrl}${Crud.path.winners}/${id}`);
+    let result = await response.json() as winner;
+    return result;
+  }
+
+  public static async createWinner(winner: winner){
+    const response = await fetch(`${Crud.baseUrl}${Crud.path.winners}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: JSON.stringify(winner)
+    });
   }
 
 }

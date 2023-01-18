@@ -47,7 +47,17 @@ class Listeners {
     });
 
     const raceBtn = document.querySelector(".raceBtn");
-    raceBtn?.addEventListener("click", Services.startRace);
+    raceBtn?.addEventListener("click", () => {
+      console.log(Services.isRace);
+      
+      if(Services.isRace === false && Services.countRace === 0){ Services.startRace()}
+    });
+
+    const resetBtn = document.querySelector(".resetBtn");
+    resetBtn?.addEventListener("click", () => {
+      Services.countRace = 0;
+      Services.updateGaragePage
+    })
   }
 }
 

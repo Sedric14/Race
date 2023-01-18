@@ -1,17 +1,23 @@
 import Listeners from "../controller/Listeners";
 import App from "../view/app/app";
 import GaragePage from "../view/garageRender";
+import MessageRender from "../view/MessageRender";
 import Crud from "./CrudServices";
-import { car, engine } from "./Interfaces";
+import { body, car, engine, winner } from "./Interfaces";
 
 class Services {
-  static namesArray = ["Tesla", "BMW", "Mersedes", "Ford", "Opel", "Wolkswagen", "Telega",
-    "Audi", "Shkoda", "Yaguar", "Lambordgini", "RollsRoys", "Nissan", "Hyndai", "Masda",
+  static namesArray = ["Tesla", "BMW", "Mercedes", "Ford", "Opel", "Volkswagen", "Telega",
+    "Audi", "Skoda", "Yaguar", "Lamborghini", "Rolls-Royce", "Nissan", "Hyundai", "Mazda",
     "Mitsubishi", "Honda", "Toyota"];
 
-  static garagePage = new GaragePage("garage");
+    static secondArray = ["Model Y", "X7", "W233", "Mustang", "Insignia", "Passat", "RS7", 
+    "Fabia", "X-Type", "Huracan", "Phantom", "Patrol", "Elantra", "Miata", "Lancer", "Accord", "Prius"]
 
-  public static updateGaragePage(){
+  static garagePage = new GaragePage("garage");
+  static isRace = false;
+  static countRace = 0;
+
+  public static updateGaragePage() {
     const app = new App();
     app.run()
   }
@@ -27,6 +33,28 @@ class Services {
       color: `${color}`,
     };
     Crud.createCar(car);
+  }
+
+  public static createWin(wId: number, wTime: number) {
+    let win: winner = {
+      id: wId,
+      time: wTime,
+      wins: 1
+    };
+    Crud.getWin(wId).then((i) => {
+      if (i.id !== undefined) {
+        const body: body = {
+          time: wTime,
+          wins: (i.wins + 1)
+        }
+        if (i.time < wTime) body.time = i.time;
+        console.log(i.time, wTime, body.time);
+        
+        Crud.updateWin(wId, body)
+      } else {
+        Crud.createWinner(win);
+      }
+    })
   }
 
   public static update(car: car) {
@@ -49,7 +77,9 @@ class Services {
 
   public static generateCars() {
     for (let i = 0; i < 100; i++) {
-      const name = this.namesArray[Math.floor(Math.random() * this.namesArray.length)];
+      const first = this.namesArray[Math.floor(Math.random() * this.namesArray.length)];
+      const second = this.secondArray[Math.floor(Math.random() * this.secondArray.length)];
+      const name = `${first} ${second}`;
       const color = this.generateColor();
       const car: car = {
         id: null,
@@ -59,23 +89,24 @@ class Services {
       Crud.createCar(car);
     }
     this.garagePage.render();
-    App.renderNewPage("garage")
   }
 
-  public static runAnim(id: number, status: string) {
-    const btnB =document.getElementById(`btnB${id}`);
-    const btnA =document.getElementById(`btnA${id}`);
-    if(status === "stopped" && !btnB?.classList.contains("disactiveBtn")){
+  public static runAnim(id: number, status: string, btn: string) {
+    const btnB = document.getElementById(`btnB${id}`);
+    const btnA = document.getElementById(`btnA${id}`);
+    if(btn === "A" && btnA?.classList.contains("disactiveBtn")) return;
+    if(btn === "B" && btnB?.classList.contains("disactiveBtn")) return;
+    if (status === "stopped" && !btnB?.classList.contains("disactiveBtn")) {
       btnB?.classList.add("disactiveBtn");
       btnA?.classList.remove("disactiveBtn");
     }
-    if(status === "started" && !btnA?.classList.contains("disactiveBtn")){
+    if (status === "started" && !btnA?.classList.contains("disactiveBtn")) {
       btnA?.classList.add("disactiveBtn");
       btnB?.classList.remove("disactiveBtn");
     }
     const engine = Crud.runStop(id, status);
     engine.then((i) => {
-     Services.anim(i.velocity, i.distance, id)
+      Services.anim(i.velocity, i.distance, id)
     })
   }
 
@@ -89,17 +120,35 @@ class Services {
     function animation() {
       car.style.left = `${pos += speed}px`;
       if (pos < (width - 240) && st !== 500) window.requestAnimationFrame(animation);
+      if (pos > (width - 240) && Services.isRace === true) {
+        Services.countRace === 6 ? Services.countRace = 0 : Services.countRace += 1;
+        const time = (Math.floor((Date.now() - startTime) / 10)) / 100;
+        Services.showWinMessage(id, time);
+        Services.isRace = false;
+      }
     }
+    const startTime = Date.now();
     requestAnimationFrame(animation);
     driveStatus.then((k) => { st = k })
   }
 
-  public static startRace(){
+  public static showWinMessage(id: number, time: number) {
+    const car = Crud.getCar(id);
+    let name: string;
+    car.then((i) => {
+      name = i.name
+      App.bodyContainer.append(MessageRender.render(name, time));
+      Services.createWin(id, time);
+    })
+  }
+
+  public static startRace() {
+    Services.isRace = true;
     const arrayCars = Crud.getAllCar();
     arrayCars.then((arr) => {
       arr.forEach((i, ind) => {
-        if(ind >= (GaragePage.page * 7) && ind < ((GaragePage.page + 1) * 7)){
-          Services.runAnim(i.id as number, "started");
+        if (ind >= (GaragePage.page * 7) && ind < ((GaragePage.page + 1) * 7)) {
+          Services.runAnim(i.id as number, "started", "none");
         }
       })
     })
