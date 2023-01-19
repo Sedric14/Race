@@ -3,7 +3,7 @@
   flex-direction: column;
   margin-left: 30px;
   margin-top: 20px;
-  width: 540px;
+  width: 620px;
 
   & > div{
     line-height: 25px;
@@ -35,11 +35,11 @@
     }
 
     .winListHeaderName{
-      width: 120px;
+      width: 180px;
     }
 
     .winListHeaderCount{
-      width: 60px;
+      width: 80px;
     }
     
     .winListHeaderTime{
@@ -69,7 +69,7 @@
     }
 
     .winName{
-      width: 120px;
+      width: 180px;
     }
 
     .winCount{
@@ -78,6 +78,23 @@
     
     .winTime{
       width: 120px;
+    }
+  }
+}
+
+.winPrewNextBlock {
+  display: flex;
+  margin-top: 10px;
+  margin-left: 25px;
+
+  .prewNext {
+    height: 15px;
+    line-height: 15px;
+    margin: 0 5px;
+
+    &::after {
+      top: -14px;
+      border-radius: 3px;
     }
   }
 }

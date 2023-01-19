@@ -1,49 +1,40 @@
-/* eslint-disable import/no-unresolved */
-/* eslint-disable import/extensions */
+/* eslint-disable import/no-named-as-default */
+// eslint-disable-next-line import/no-cycle
 import Listeners from "../../controller/Listeners";
-import Crud from "../../model/CrudServices";
-import Services from "../../model/Services";
 import ErrorPage, { ErrorTypes } from "../errorRender";
 import GaragePage from "../garageRender";
 import WinnersPage from "../winnerRender";
 import Header from "./header";
-import Page from "./page";
-
-// export const PageIds = {
-//   GaragePage: "garage",
-//   WinnersPage: "winner",
-// };
 
 class App {
-  public static bodyContainer: HTMLElement = document.body;
+  static bodyContainer: HTMLElement = document.body;
 
-  private static defaultPageId = "current-page";
+  static defaultPageId = "current-page";
 
-  private header: Header;
-  
+  header: Header;
 
   static renderNewPage(idPage: string) {
     const gPage = document.getElementById("garage");
     const wPage = document.getElementById("winners");
     const errPage = document.getElementById("error");
 
-    if (idPage === "garage") {
-      if(gPage) gPage.style.display = "block";
-      if(wPage) wPage.style.display = "none";
-      if(errPage) errPage.style.display = "none";
+    if (idPage === "garage" || idPage === "") {
+      if (gPage) gPage.style.display = "block";
+      if (wPage) wPage.style.display = "none";
+      if (errPage) errPage.style.display = "none";
     } else if (idPage === "winners") {
-      if(gPage) gPage.style.display = "none";
-      if(wPage) wPage.style.display = "block";
-      if(errPage) errPage.style.display = "none";
+      if (gPage) gPage.style.display = "none";
+      if (wPage) wPage.style.display = "block";
+      if (errPage) errPage.style.display = "none";
     } else {
-      if(gPage) gPage.style.display = "none";
-      if(wPage) wPage.style.display = "none";
-      if(errPage) errPage.style.display = "block";
+      if (gPage) gPage.style.display = "none";
+      if (wPage) wPage.style.display = "none";
+      if (errPage) errPage.style.display = "block";
     }
-      Listeners.create();
+    Listeners.create();
   }
 
-  private static enableRouteChange() {
+  static enableRouteChange() {
     window.addEventListener("hashchange", () => {
       const hash = window.location.hash.slice(1);
       App.renderNewPage(hash);
@@ -55,6 +46,18 @@ class App {
   }
 
   run() {
+    if (!sessionStorage.getItem("page")) {
+      sessionStorage.setItem("page", JSON.stringify(0));
+    }
+    if (!sessionStorage.getItem("wPage")) {
+      sessionStorage.setItem("wPage", JSON.stringify(0));
+    }
+    if (!sessionStorage.getItem("sortWins")) {
+      sessionStorage.setItem("sortWins", WinnersPage.winsSorted.none);
+    }
+    if (!sessionStorage.getItem("sortTime")) {
+      sessionStorage.setItem("sortTime", WinnersPage.winsSorted.none);
+    }
     App.bodyContainer.replaceChildren();
     App.bodyContainer.append(this.header.render());
     const garagePage = new GaragePage("garage");
@@ -68,8 +71,9 @@ class App {
     const wPage = winnerPage.render();
     wPage.id = "winners";
     wPage.style.display = "none";
-    App.bodyContainer.append(gPage, wPage, errPage)
-    App.renderNewPage("garage");
+    App.bodyContainer.append(gPage, wPage, errPage);
+    const hash = window.location.hash.slice(1);
+    App.renderNewPage(hash);
     App.enableRouteChange();
   }
 }

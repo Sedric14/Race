@@ -1,5 +1,6 @@
+// eslint-disable-next-line prettier/prettier
 abstract class Page {
-  protected container: HTMLElement;
+  container: HTMLElement;
 
   static TextObject = {};
 
@@ -8,7 +9,7 @@ abstract class Page {
     this.container.id = id;
   }
 
-  protected static createHeaderTitle(text: string) {
+  static createHeaderTitle(text: string) {
     const headerTitle = document.createElement("h1");
     headerTitle.innerText = text;
     return headerTitle;

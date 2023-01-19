@@ -1,9 +1,11 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable import/no-cycle */
 import Listeners from "../controller/Listeners";
 import App from "../view/app/app";
 import GaragePage from "../view/garageRender";
 import MessageRender from "../view/MessageRender";
 import Crud from "./CrudServices";
-import { body, car, engine, winner } from "./Interfaces";
+import { body, car, winner } from "./Interfaces";
 
 class Services {
   static namesArray = ["Tesla", "BMW", "Mercedes", "Ford", "Opel", "Volkswagen", "Telega",
@@ -14,55 +16,57 @@ class Services {
     "Fabia", "X-Type", "Huracan", "Phantom", "Patrol", "Elantra", "Miata", "Lancer", "Accord", "Prius"]
 
   static garagePage = new GaragePage("garage");
-  static isRace = false;
-  static countRace = 0;
 
-  public static updateGaragePage() {
+  static isRace = false;
+
+  static countRace = 7;
+
+  static updateGaragePage() {
     const app = new App();
     app.run()
   }
 
-  public static create() {
+  static animIdArray: number[] = [];
+
+  static create() {
     const inputName = document.querySelector(".inputTopCont") as HTMLInputElement;
     const inputColor = document.querySelector(".colorTopCont") as HTMLInputElement;
     const name = inputName.value;
     const color = inputColor.value;
-    const car: car = {
+    const newCar: car = {
       id: null,
       name: `${name}`,
       color: `${color}`,
     };
-    Crud.createCar(car);
+    Crud.createCar(newCar);
   }
 
-  public static createWin(wId: number, wTime: number) {
-    let win: winner = {
+  static createWin(wId: number, wTime: number) {
+    const win: winner = {
       id: wId,
       time: wTime,
       wins: 1
     };
     Crud.getWin(wId).then((i) => {
       if (i.id !== undefined) {
-        const body: body = {
+        const Body: body = {
           time: wTime,
           wins: (i.wins + 1)
         }
-        if (i.time < wTime) body.time = i.time;
-        console.log(i.time, wTime, body.time);
-        
-        Crud.updateWin(wId, body)
+        if (i.time < wTime) Body.time = i.time;
+        Crud.updateWin(wId, Body)
       } else {
         Crud.createWinner(win);
       }
     })
   }
 
-  public static update(car: car) {
+  static update(uCar: car) {
     const inputName = document.querySelector(".inputMiddleCont") as HTMLInputElement;
     const inputColor = document.querySelector(".colorMiddleCont") as HTMLInputElement;
-    inputName.value = car.name;
-    inputColor.value = car.color;
-    Listeners.updatingCar = car;
+    inputName.value = uCar.name;
+    inputColor.value = uCar.color;
+    Listeners.updatingCar = uCar;
   }
 
   static generateColor() {
@@ -75,23 +79,23 @@ class Services {
     return `#${red}${green}${blue}`;
   }
 
-  public static generateCars() {
-    for (let i = 0; i < 100; i++) {
+  static generateCars() {
+    for (let i = 0; i < 100; i += 1) {
       const first = this.namesArray[Math.floor(Math.random() * this.namesArray.length)];
       const second = this.secondArray[Math.floor(Math.random() * this.secondArray.length)];
       const name = `${first} ${second}`;
       const color = this.generateColor();
-      const car: car = {
+      const newCar: car = {
         id: null,
         name: `${name}`,
         color: `${color}`,
       };
-      Crud.createCar(car);
+      Crud.createCar(newCar);
     }
     this.garagePage.render();
   }
 
-  public static runAnim(id: number, status: string, btn: string) {
+  static runAnim(id: number, status: string, btn: string) {
     const btnB = document.getElementById(`btnB${id}`);
     const btnA = document.getElementById(`btnA${id}`);
     if(btn === "A" && btnA?.classList.contains("disactiveBtn")) return;
@@ -110,45 +114,62 @@ class Services {
     })
   }
 
-  public static anim(vel: number, dist: number, id: number) {
+  static anim(vel: number, dist: number, id: number) {
     const driveStatus = Crud.driveStatus(id, "drive");
-    const car = document.getElementById(`car${id}`) as HTMLElement;
+    const animCar = document.getElementById(`car${id}`) as HTMLElement;
     const width = window.innerWidth;
     const speed = width / dist * 7.5 * vel;
     let pos = 0;
     let st = 0;
+    const startTime = Date.now();
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    const animId = requestAnimationFrame(animation);
+    Services.animIdArray.push(animId);
+    
+    
+    // eslint-disable-next-line no-console
+    console.log(Services.animIdArray);
     function animation() {
-      car.style.left = `${pos += speed}px`;
-      if (pos < (width - 240) && st !== 500) window.requestAnimationFrame(animation);
-      if (pos > (width - 240) && Services.isRace === true) {
-        Services.countRace === 6 ? Services.countRace = 0 : Services.countRace += 1;
+      // eslint-disable-next-line no-console
+      console.log(Services.countRace);
+      animCar.style.left = `${pos += speed}px`;
+      if (pos < (width - 240) && st !== 500 && st!== 404) window.requestAnimationFrame(animation);
+      if (st === 500) Services.countRace += 1;
+      if (pos > (width - 240)) {
+        // if(Services.countRace === 6) {
+        //   Services.countRace = 0;
+        // }else{
+          Services.countRace += 1;
+        // } 
         const time = (Math.floor((Date.now() - startTime) / 10)) / 100;
-        Services.showWinMessage(id, time);
+        if (Services.isRace ===  true) Services.showWinMessage(id, time);
         Services.isRace = false;
       }
+      window.cancelAnimationFrame(animId)
     }
-    const startTime = Date.now();
-    requestAnimationFrame(animation);
+    
+    
     driveStatus.then((k) => { st = k })
   }
 
-  public static showWinMessage(id: number, time: number) {
-    const car = Crud.getCar(id);
+  static showWinMessage(id: number, time: number) {
+    const Car = Crud.getCar(id);
     let name: string;
-    car.then((i) => {
+    Car.then((i) => {
       name = i.name
-      App.bodyContainer.append(MessageRender.render(name, time));
+      const garPage = document.querySelector("#garage");
+      garPage?.append(MessageRender.render(name, time));
       Services.createWin(id, time);
     })
   }
 
-  public static startRace() {
+  static startRace() {
     Services.isRace = true;
     const arrayCars = Crud.getAllCar();
     arrayCars.then((arr) => {
       arr.forEach((i, ind) => {
         if (ind >= (GaragePage.page * 7) && ind < ((GaragePage.page + 1) * 7)) {
-          Services.runAnim(i.id as number, "started", "none");
+          if(i.id) Services.runAnim(i.id, "started", "none");
         }
       })
     })

@@ -1,8 +1,5 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-shadow */
-/* eslint-disable import/extensions */
-/* eslint-disable import/no-unresolved */
-import Page from "../view/app/page";
+/* eslint-disable prettier/prettier */
+import Page from "./app/page";
 
 export const enum ErrorTypes {
   Error_404 = 404,

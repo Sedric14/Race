@@ -1,22 +1,16 @@
-/* eslint-disable no-useless-constructor */
-/* eslint-disable import/extensions */
-/* eslint-disable import/no-unresolved */
-// import Component from "../app/components";
-// import { PageIds } from "../app/app";
-
 const Buttons = [
   {
     id: "garage",
-    text: "GARAGE",
+    text: "GARAGE"
   },
   {
     id: "winners",
-    text: "WINNERS",
-  },
+    text: "WINNERS"
+  }
 ];
 
 class Header {
-  protected container: HTMLElement;
+  container: HTMLElement;
 
   constructor(tagName: string, className: string) {
     this.container = document.createElement(tagName);
@@ -25,7 +19,7 @@ class Header {
 
   renderPageButtons() {
     const pageButtons = document.createElement("div");
-    pageButtons.className = "headerBtnContainer"
+    pageButtons.className = "headerBtnContainer";
     Buttons.forEach((button) => {
       const buttonHTML = document.createElement("a");
       buttonHTML.className = "headerBtn btnOne";
