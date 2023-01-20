@@ -90,10 +90,6 @@ class Listeners {
     const resetBtn = document.querySelector(".resetBtn");
     resetBtn?.addEventListener("click", () => {
       Services.isRace = false;
-      // Services.animIdArray.forEach((i) => {
-      //   window.cancelAnimationFrame(i);
-      // });
-      // Services.animIdArray = [];
       Services.updateGaragePage();
     });
 

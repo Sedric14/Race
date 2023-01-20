@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-   "types": ["jest"],
+   "types": ["jest", "node"],
    "lib": ["DOM", "ES2022", "DOM.Iterable"],
    "strict": true,
    "alwaysStrict": true,

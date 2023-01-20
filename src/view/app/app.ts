@@ -1,5 +1,5 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable import/no-named-as-default */
-// eslint-disable-next-line import/no-cycle
 import Listeners from "../../controller/Listeners";
 import ErrorPage, { ErrorTypes } from "../errorRender";
 import GaragePage from "../garageRender";

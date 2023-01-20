@@ -4,6 +4,8 @@ import Crud from "../model/CrudServices";
 import { car } from "../model/Interfaces";
 import Page from "./app/page";
 import Services from "../model/Services";
+// import App from "./app/app";
+// import { strSvg } from "../assets/svg/svg";
 
 class GaragePage extends Page {
   static carImage =
@@ -100,6 +102,9 @@ class GaragePage extends Page {
     newCar.className = "car";
     newCar.id = `car${i.id}`;
     newCar.style.backgroundColor = `${i.color}`;
+    newCar.style.webkitMaskImage = `url("https://raw.githubusercontent.com/Sedric14/assets/main/race/car${Math.floor(
+      Math.random() * 6 + 1
+    )}.png")`;
     const flag = document.createElement("div");
     flag.className = "flag";
     bottomBlock.append(btnA, btnB, newCar, flag);

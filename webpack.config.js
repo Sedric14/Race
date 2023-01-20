@@ -5,9 +5,10 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const SpriteLoaderPlugin = require("svg-sprite-loader/plugin");
 
 module.exports = {
-  entry: { index: "./src/index.ts" },
+  entry: { index: "./src/index.js" },
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js"
@@ -15,6 +16,30 @@ module.exports = {
   mode: "production",
   module: {
     rules: [
+      {
+        test: /\.svg$/,
+        use: "svg-sprite-loader"
+      },
+      // {
+      //   test: /\.svg$/i,
+
+      //   // from all svg images
+      //   // include only sprite image
+      //   include: /.*_sprite\.svg/,
+
+      //   use: [
+      //     {
+      //       loader: "svg-sprite-loader",
+      //       options: {
+      //         publicPath: ""
+      //       }
+      //     }
+      //   ]
+      // },
+      // {
+      //   test: /\.svg$/,
+      //   loader: "svg-inline-loader"
+      // },
       { test: /\.txt$/, use: "raw-loader" },
       {
         test: /\.tsx?$/,
@@ -45,6 +70,7 @@ module.exports = {
     ]
   },
   plugins: [
+    new SpriteLoaderPlugin(),
     new CleanWebpackPlugin(),
     new HtmlWebPackPlugin({ template: "./src/index.html" }),
     new MiniCssExtractPlugin({
