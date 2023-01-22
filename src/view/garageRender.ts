@@ -1,18 +1,12 @@
+/* eslint-disable no-console */
 /* eslint-disable import/no-cycle */
-
 import Crud from "../model/CrudServices";
 import { car } from "../model/Interfaces";
-import Page from "./app/page";
+import Page from "./page";
 import Services from "../model/Services";
-// import App from "./app/app";
-// import { strSvg } from "../assets/svg/svg";
+import App from "./app";
 
 class GaragePage extends Page {
-  static carImage =
-    "https://raw.githubusercontent.com/Sedric14/assets/main/race/car.svg";
-
-  static page = Number(sessionStorage.getItem("page"));
-
   static createHeaderTitle(text: string) {
     const headerTitle = document.createElement("h1");
     headerTitle.textContent = `${text}`;
@@ -20,9 +14,7 @@ class GaragePage extends Page {
     return headerTitle;
   }
 
-  static createChangeContainer() {
-    const changeContainer = document.createElement("div");
-    changeContainer.className = "changeContainer";
+  static createTopChangeCont() {
     const topCont = document.createElement("div");
     topCont.className = "topCont conts";
     const inputTopCont = document.createElement("input");
@@ -34,6 +26,10 @@ class GaragePage extends Page {
     btnTopCont.className = "btnTopCont btnChange btnOne";
     btnTopCont.textContent = "CREATE";
     topCont.append(inputTopCont, colorTopCont, btnTopCont);
+    return topCont;
+  }
+
+  static createMiddleChangeCont() {
     const middleCont = document.createElement("div");
     middleCont.className = "middleCont conts";
     const inputMiddleCont = document.createElement("input");
@@ -45,6 +41,10 @@ class GaragePage extends Page {
     btnMiddleCont.className = "btnMiddleCont btnChange btnOne";
     btnMiddleCont.textContent = "UPDATE";
     middleCont.append(inputMiddleCont, colorMiddleCont, btnMiddleCont);
+    return middleCont;
+  }
+
+  static createBottomChangeCont() {
     const bottomCont = document.createElement("div");
     bottomCont.className = "bottomCont conts";
     const raceBtn = document.createElement("div");
@@ -57,13 +57,20 @@ class GaragePage extends Page {
     genCarsBtn.className = "genCarsBtn btnOne";
     genCarsBtn.textContent = "GENERATE CARS";
     bottomCont.append(raceBtn, resetBtn, genCarsBtn);
+    return bottomCont;
+  }
+
+  static createChangeContainer() {
+    const changeContainer = document.createElement("div");
+    changeContainer.className = "changeContainer";
+    const topCont = GaragePage.createTopChangeCont();
+    const middleCont = GaragePage.createMiddleChangeCont();
+    const bottomCont = GaragePage.createBottomChangeCont();
     changeContainer.append(topCont, middleCont, bottomCont);
     return changeContainer;
   }
 
-  static createCarBlock(i: car) {
-    const carBlock = document.createElement("div");
-    carBlock.className = "carBlock";
+  static createButtonBlock(i: car) {
     const btnBlock = document.createElement("div");
     btnBlock.className = "btnBlock";
     const selectBtn = document.createElement("div");
@@ -82,6 +89,10 @@ class GaragePage extends Page {
     nameCar.className = "nameCar";
     nameCar.textContent = i.name;
     btnBlock.append(selectBtn, removeBtn, nameCar);
+    return btnBlock;
+  }
+
+  static createBottomBlock(i: car) {
     const bottomBlock = document.createElement("div");
     bottomBlock.className = "bottomBlock";
     const btnA = document.createElement("div");
@@ -108,6 +119,14 @@ class GaragePage extends Page {
     const flag = document.createElement("div");
     flag.className = "flag";
     bottomBlock.append(btnA, btnB, newCar, flag);
+    return bottomBlock;
+  }
+
+  static createCarBlock(i: car) {
+    const carBlock = document.createElement("div");
+    carBlock.className = "carBlock";
+    const btnBlock = GaragePage.createButtonBlock(i);
+    const bottomBlock = GaragePage.createBottomBlock(i);
     carBlock.append(btnBlock, bottomBlock);
     return carBlock;
   }
@@ -134,7 +153,8 @@ class GaragePage extends Page {
       const title = document.querySelector(".garageTitle");
       if (title) title.textContent = `GARAGE (${carCount})`;
       el.forEach((i, ind) => {
-        if (ind >= GaragePage.page * 7 && ind < (GaragePage.page + 1) * 7) {
+        const page = Number(sessionStorage.getItem(App.sessions.garPage));
+        if (ind >= page * 7 && ind < (page + 1) * 7) {
           carBlockContainer.append(GaragePage.createCarBlock(i));
         }
       });
@@ -145,7 +165,9 @@ class GaragePage extends Page {
   static createPageNum() {
     const pageNum = document.createElement("p");
     pageNum.className = "pageNum";
-    pageNum.textContent = `page #${GaragePage.page + 1}`;
+    pageNum.textContent = `page #${
+      Number(sessionStorage.getItem(App.sessions.garPage)) + 1
+    }`;
     return pageNum;
   }
 

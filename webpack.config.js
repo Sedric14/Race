@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
@@ -6,6 +7,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const SpriteLoaderPlugin = require("svg-sprite-loader/plugin");
+const HtmlWebpackInlineSVGPlugin = require("html-webpack-inline-svg-plugin");
 
 module.exports = {
   entry: { index: "./src/index.js" },
@@ -17,29 +19,29 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.svg$/,
-        use: "svg-sprite-loader"
+        test: /\.icon.svg$/,
+        use: [
+          {
+            loader: "svg-sprite-loader",
+            options: {
+              extract: true,
+              spriteFilename: () => {
+                return `img/sprite.[md5:hash:hex:8].svg`;
+              }
+            }
+          }
+        ]
       },
-      // {
-      //   test: /\.svg$/i,
-
-      //   // from all svg images
-      //   // include only sprite image
-      //   include: /.*_sprite\.svg/,
-
-      //   use: [
-      //     {
-      //       loader: "svg-sprite-loader",
-      //       options: {
-      //         publicPath: ""
-      //       }
-      //     }
-      //   ]
-      // },
-      // {
-      //   test: /\.svg$/,
-      //   loader: "svg-inline-loader"
-      // },
+      {
+        test: /\.svg$/,
+        loader: "svg-url-loader",
+        exclude: [/\/icons\//],
+        options: {
+          limit: 1 * 1024,
+          noquotes: true,
+          iesafe: true
+        }
+      },
       { test: /\.txt$/, use: "raw-loader" },
       {
         test: /\.tsx?$/,
@@ -73,6 +75,7 @@ module.exports = {
     new SpriteLoaderPlugin(),
     new CleanWebpackPlugin(),
     new HtmlWebPackPlugin({ template: "./src/index.html" }),
+    new HtmlWebpackInlineSVGPlugin(),
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css"
     }),

@@ -14,16 +14,18 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    // background-color: #fff;
 
     & > div {
       height: 25px;
       background-color: rgba(59, 49, 166, 0.395);
       border-radius: 4px;
-      padding: 0 5px;
       line-height: 25px;
       text-align: center;
       margin: 0 3px;
+
+      &::after{
+        top: -28px;
+      }
     }
 
     .winListHeaderNum{
@@ -53,6 +55,8 @@
 
     & > p {
       line-height: 50px;
+      color: rgb(255, 255, 86);
+      font-family: sans-serif;
     }
 
     .winNum{

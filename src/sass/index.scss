@@ -1,13 +1,12 @@
 @import "nullStyle.scss";
 
 body{
-  background-color: rgb(50, 50, 50);
+  background-color: rgb(27, 27, 27);
 }
 
 .headerBtnContainer {
   margin: 20px 0 0 30px;
   width: 220px;
-  // padding: 20px;
   background-color: rgba(32, 126, 34, 0.099);
   display: flex;
   justify-content: space-between;

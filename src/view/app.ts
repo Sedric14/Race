@@ -1,15 +1,24 @@
+/* eslint-disable no-console */
 /* eslint-disable import/no-cycle */
-/* eslint-disable import/no-named-as-default */
-import Listeners from "../../controller/Listeners";
-import ErrorPage, { ErrorTypes } from "../errorRender";
-import GaragePage from "../garageRender";
-import WinnersPage from "../winnerRender";
+import Listeners from "../controller/Listeners";
+import ErrorPage, { ErrorTypes } from "./errorRender";
+import GaragePage from "./garageRender";
+import WinnersPage from "./winnerRender";
 import Header from "./header";
 
 class App {
   static bodyContainer: HTMLElement = document.body;
 
   static defaultPageId = "current-page";
+
+  static sessions = {
+    garPage: "page",
+    winPage: "wPage",
+    pagWin: "sortWins",
+    pagTime: "sortTime"
+  };
+
+  static sorted = { none: "none", up: "up", down: "down" };
 
   header: Header;
 
@@ -46,17 +55,17 @@ class App {
   }
 
   run() {
-    if (!sessionStorage.getItem("page")) {
-      sessionStorage.setItem("page", JSON.stringify(0));
+    if (!sessionStorage.getItem(App.sessions.garPage)) {
+      sessionStorage.setItem(App.sessions.garPage, JSON.stringify(0));
     }
-    if (!sessionStorage.getItem("wPage")) {
-      sessionStorage.setItem("wPage", JSON.stringify(0));
+    if (!sessionStorage.getItem(App.sessions.winPage)) {
+      sessionStorage.setItem(App.sessions.winPage, JSON.stringify(0));
     }
-    if (!sessionStorage.getItem("sortWins")) {
-      sessionStorage.setItem("sortWins", WinnersPage.winsSorted.none);
+    if (!sessionStorage.getItem(App.sessions.pagWin)) {
+      sessionStorage.setItem(App.sessions.pagWin, App.sorted.none);
     }
-    if (!sessionStorage.getItem("sortTime")) {
-      sessionStorage.setItem("sortTime", WinnersPage.winsSorted.none);
+    if (!sessionStorage.getItem(App.sessions.pagTime)) {
+      sessionStorage.setItem(App.sessions.pagTime, App.sorted.none);
     }
     App.bodyContainer.replaceChildren();
     App.bodyContainer.append(this.header.render());

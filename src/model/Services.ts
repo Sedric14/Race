@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 /* eslint-disable prettier/prettier */
 /* eslint-disable import/no-cycle */
 import Listeners from "../controller/Listeners";
-import App from "../view/app/app";
+import App from "../view/app";
 import GaragePage from "../view/garageRender";
 import MessageRender from "../view/MessageRender";
 import Crud from "./CrudServices";
@@ -21,12 +22,12 @@ class Services {
 
   static countRace = 7;
 
+  static animIdArray: number[] = [];
+
   static updateGaragePage() {
     const app = new App();
     app.run()
   }
-
-  static animIdArray: number[] = [];
 
   static create() {
     const inputName = document.querySelector(".inputTopCont") as HTMLInputElement;
@@ -125,30 +126,18 @@ class Services {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     const animId = requestAnimationFrame(animation);
     Services.animIdArray.push(animId);
-    
-    
-    // eslint-disable-next-line no-console
-    console.log(Services.animIdArray);
     function animation() {
-      // eslint-disable-next-line no-console
-      console.log(Services.countRace);
       animCar.style.left = `${pos += speed}px`;
-      if (pos < (width - 240) && st !== 500 && st!== 404) window.requestAnimationFrame(animation);
+      if (pos < (width - 265) && st !== 500 && st!== 404) window.requestAnimationFrame(animation);
       if (st === 500) Services.countRace += 1;
-      if (pos > (width - 240)) {
-        // if(Services.countRace === 6) {
-        //   Services.countRace = 0;
-        // }else{
+      if (pos > (width - 265)) {
           Services.countRace += 1;
-        // } 
         const time = (Math.floor((Date.now() - startTime) / 10)) / 100;
         if (Services.isRace ===  true) Services.showWinMessage(id, time);
         Services.isRace = false;
       }
       window.cancelAnimationFrame(animId)
     }
-    
-    
     driveStatus.then((k) => { st = k })
   }
 
@@ -168,7 +157,8 @@ class Services {
     const arrayCars = Crud.getAllCar();
     arrayCars.then((arr) => {
       arr.forEach((i, ind) => {
-        if (ind >= (GaragePage.page * 7) && ind < ((GaragePage.page + 1) * 7)) {
+        const page = Number(sessionStorage.getItem(App.sessions.garPage));
+        if (ind >= (page * 7) && ind < ((page + 1) * 7)) {
           if(i.id) Services.runAnim(i.id, "started", "none");
         }
       })

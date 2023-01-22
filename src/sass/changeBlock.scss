@@ -36,7 +36,6 @@
   justify-content: space-between;
   height: 38px;
   width: 100%;
-  // background-color: rgb(35, 165, 188);
   padding: 4px;
 }
 
@@ -85,13 +84,17 @@
 }
 
 .titlePage{
-  color: white;
+  font-family: sans-serif;
+  color: gold;
   font-size: 150%;
   margin: 50px 0 0 30px;
+  text-shadow: 1px 1px 2px black, 0 0 1em black, 0 0 0.2em black;
 }
 
 .pageNum{
-  color: white;
+  font-family: sans-serif;
+  color: rgb(253, 227, 80);
   font-size: 120%;
   margin: 10px 0 0 30px;
+  text-shadow: 1px 1px 2px black, 0 0 1em black, 0 0 0.2em black;
 }

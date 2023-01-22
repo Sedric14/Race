@@ -42,7 +42,6 @@ class Crud {
   }
 
   static async updateCar() {
-    // const inputName: HTMLInputElement;
     const inputName = document.querySelector(".inputMiddleCont")as HTMLInputElement;
     const inputColor = document.querySelector(".colorMiddleCont")as HTMLInputElement;
     const upCar: car = {

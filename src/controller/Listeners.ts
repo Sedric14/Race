@@ -1,84 +1,59 @@
+/* eslint-disable no-console */
+/* eslint-disable no-param-reassign */
 /* eslint-disable import/no-cycle */
 import Crud from "../model/CrudServices";
 import { car } from "../model/Interfaces";
 import Services from "../model/Services";
-import GaragePage from "../view/garageRender";
+import App from "../view/app";
 import WinnersPage from "../view/winnerRender";
 
 class Listeners {
   static updatingCar: car;
 
   static create(): void {
+    Listeners.make();
+    Listeners.update();
+    Listeners.generate();
+    Listeners.race();
+    Listeners.reset();
+    Listeners.nextPrew();
+    Listeners.pagination(
+      App.sessions.pagWin,
+      App.sessions.pagTime,
+      ".winListHeaderCount"
+    );
+    Listeners.pagination(
+      App.sessions.pagTime,
+      App.sessions.pagWin,
+      ".winListHeaderTime"
+    );
+  }
+
+  static make() {
     const btnTopCont = document.querySelector(".btnTopCont");
     btnTopCont?.addEventListener("click", () => {
       Services.create();
       Services.updateGaragePage();
     });
+  }
 
+  static update() {
     const btnMiddleCont = document.querySelector(".btnMiddleCont");
     btnMiddleCont?.addEventListener("click", () => {
       Crud.updateCar();
       Services.updateGaragePage();
     });
+  }
 
+  static generate() {
     const genCars = document.querySelector(".genCarsBtn");
     genCars?.addEventListener("click", () => {
       Services.generateCars();
       Services.updateGaragePage();
     });
+  }
 
-    const prew = document.querySelector(".prew");
-    prew?.addEventListener("click", () => {
-      if (GaragePage.page > 0) {
-        sessionStorage.setItem("page", JSON.stringify(GaragePage.page - 1));
-        GaragePage.page = Number(sessionStorage.getItem("page"));
-      }
-      //  GaragePage.page -= 1;
-      const pageNum = document.querySelector(".pageNum");
-      if (pageNum) pageNum.textContent = `page #${GaragePage.page + 1}`;
-      Services.updateGaragePage();
-    });
-
-    const next = document.querySelector(".next");
-    next?.addEventListener("click", () => {
-      const allCar = Crud.getAllCar();
-      allCar.then((el) => {
-        if (Math.ceil(el.length / 7) > GaragePage.page + 1) {
-          sessionStorage.setItem("page", JSON.stringify(GaragePage.page + 1));
-          GaragePage.page = Number(sessionStorage.getItem("page"));
-        }
-        // GaragePage.page += 1;
-        const pageNum = document.querySelector(".pageNum");
-        if (pageNum) pageNum.textContent = `page #${GaragePage.page + 1}`;
-      });
-      Services.updateGaragePage();
-    });
-
-    const winPrew = document.querySelector(".winPrew");
-    winPrew?.addEventListener("click", () => {
-      if (WinnersPage.page > 0) {
-        sessionStorage.setItem("wPage", JSON.stringify(WinnersPage.page - 1));
-        WinnersPage.page = Number(sessionStorage.getItem("wPage"));
-      }
-      const pageNum = document.querySelector(".winPageNum");
-      if (pageNum) pageNum.textContent = `page #${GaragePage.page + 1}`;
-      Services.updateGaragePage();
-    });
-
-    const winNext = document.querySelector(".winNext");
-    winNext?.addEventListener("click", () => {
-      const allWins = Crud.getAllWinners();
-      allWins.then((el) => {
-        if (Math.ceil(el.length / 10) > WinnersPage.page + 1) {
-          sessionStorage.setItem("wPage", JSON.stringify(WinnersPage.page + 1));
-          WinnersPage.page = Number(sessionStorage.getItem("wPage"));
-        }
-        const pageNum = document.querySelector(".winPageNum");
-        if (pageNum) pageNum.textContent = `page #${WinnersPage.page + 1}`;
-      });
-      Services.updateGaragePage();
-    });
-
+  static race() {
     const raceBtn = document.querySelector(".raceBtn");
     raceBtn?.addEventListener("click", () => {
       if (Services.isRace === false && Services.countRace === 7) {
@@ -86,48 +61,87 @@ class Listeners {
         Services.startRace();
       }
     });
+  }
 
+  static reset() {
     const resetBtn = document.querySelector(".resetBtn");
     resetBtn?.addEventListener("click", () => {
       Services.isRace = false;
       Services.updateGaragePage();
     });
+  }
 
-    const winListHeaderCount = document.querySelector(".winListHeaderCount");
-    winListHeaderCount?.addEventListener("click", () => {
-      sessionStorage.setItem("sortTime", WinnersPage.winsSorted.none);
-      if (sessionStorage.getItem("sortWins") === WinnersPage.winsSorted.none) {
-        sessionStorage.setItem("sortWins", WinnersPage.winsSorted.up);
-        WinnersPage.winsSort = sessionStorage.getItem("sortWins");
-      } else if (
-        sessionStorage.getItem("sortWins") === WinnersPage.winsSorted.up
+  static prew(sess: string, cName: string) {
+    if (Number(sessionStorage.getItem(sess)) > 0) {
+      sessionStorage.setItem(
+        sess,
+        JSON.stringify(Number(sessionStorage.getItem(sess)) - 1)
+      );
+    }
+    const pageNum = document.querySelector(cName);
+    if (pageNum)
+      pageNum.textContent = `page #${Number(sessionStorage.getItem(sess)) + 1}`;
+    Services.updateGaragePage();
+  }
+
+  static next(sess: string, cName: string, num: number) {
+    const allCar = Crud.getAllCar();
+    allCar.then((el) => {
+      if (
+        Math.ceil(el.length / num) >
+        Number(sessionStorage.getItem(sess)) + 1
       ) {
-        sessionStorage.setItem("sortWins", WinnersPage.winsSorted.down);
-      } else if (
-        sessionStorage.getItem("sortWins") === WinnersPage.winsSorted.down
-      ) {
-        sessionStorage.setItem("sortWins", WinnersPage.winsSorted.none);
+        sessionStorage.setItem(
+          "page",
+          JSON.stringify(Number(sessionStorage.getItem(sess)) + 1)
+        );
       }
-      Services.updateGaragePage();
+      const pageNum = document.querySelector(cName);
+      if (pageNum)
+        pageNum.textContent = `page #${
+          Number(sessionStorage.getItem(sess)) + 1
+        }`;
+    });
+    Services.updateGaragePage();
+  }
+
+  static nextPrew() {
+    const prew = document.querySelector(".prew");
+    prew?.addEventListener("click", () => {
+      Listeners.prew(App.sessions.garPage, ".pageNum");
     });
 
-    const winListHeaderTime = document.querySelector(".winListHeaderTime");
+    const next = document.querySelector(".next");
+    next?.addEventListener("click", () => {
+      Listeners.next(App.sessions.garPage, ".pageNum", 7);
+    });
+
+    const winPrew = document.querySelector(".winPrew");
+    winPrew?.addEventListener("click", () => {
+      Listeners.prew(App.sessions.winPage, ".winPageNum");
+    });
+
+    const winNext = document.querySelector(".winNext");
+    winNext?.addEventListener("click", () => {
+      Listeners.next(App.sessions.winPage, ".winPageNum", 10);
+    });
+  }
+
+  static pagination(sess: string, sess2: string, cName: string) {
+    const winListHeaderTime = document.querySelector(cName);
     winListHeaderTime?.addEventListener("click", () => {
-      sessionStorage.setItem("sortWins", WinnersPage.winsSorted.none);
-      if (sessionStorage.getItem("sortTime") === WinnersPage.winsSorted.none) {
-        sessionStorage.setItem("sortTime", WinnersPage.winsSorted.up);
-        WinnersPage.winsSort = sessionStorage.getItem("sortTime");
-      } else if (
-        sessionStorage.getItem("sortTime") === WinnersPage.winsSorted.up
-      ) {
-        sessionStorage.setItem("sortTime", WinnersPage.winsSorted.down);
-      } else if (
-        sessionStorage.getItem("sortTime") === WinnersPage.winsSorted.down
-      ) {
-        sessionStorage.setItem("sortTime", WinnersPage.winsSorted.none);
+      sessionStorage.setItem(sess2, App.sorted.none);
+      if (sessionStorage.getItem(sess) === App.sorted.none) {
+        sessionStorage.setItem(sess, App.sorted.up);
+        WinnersPage.winsSort = sessionStorage.getItem(sess);
+      } else if (sessionStorage.getItem(sess) === App.sorted.up) {
+        sessionStorage.setItem(sess, App.sorted.down);
+      } else if (sessionStorage.getItem(sess) === App.sorted.down) {
+        sessionStorage.setItem(sess, App.sorted.none);
       }
       Services.updateGaragePage();
     });
   }
 }
+
 export default Listeners;

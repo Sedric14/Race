@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import Page from "./app/page";
+import Page from "./page";
 
 export const enum ErrorTypes {
   Error_404 = 404,
