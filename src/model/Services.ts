@@ -126,6 +126,7 @@ class Services {
     let st = 0;
     const startTime = Date.now();
     function animation() {
+      console.log(Services.isRace, Services.countRace);
       if (pos < (width - 265) && st !== 500 && st!== 404 && animCar.style.left !== "3000px") {
          window.requestAnimationFrame(animation);
       }

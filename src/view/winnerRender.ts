@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable import/no-cycle */
 import Crud from "../model/CrudServices";
 import { winner } from "../model/Interfaces";
@@ -83,7 +84,6 @@ class WinnersPage extends Page {
   }
 
   render() {
-    const page = Number(sessionStorage.getItem(App.sessions.winPage));
     const winListContainer = document.createElement("div");
     winListContainer.className = "winListContainer";
     winListContainer.append(WinnersPage.createListHeader());
@@ -119,11 +119,14 @@ class WinnersPage extends Page {
         sorted = el;
       }
       sorted.forEach((i, ind) => {
+        const page = Number(sessionStorage.getItem(App.sessions.winPage));
+        console.log("rend", page);
         if (ind >= page * 10 && ind < (page + 1) * 10) {
           winListContainer.append(WinnersPage.createWinnerBlock(i, ind));
         }
       });
     });
+    const page = Number(sessionStorage.getItem(App.sessions.winPage));
     const pageNum = document.createElement("p");
     pageNum.className = "winPageNum pageNum";
     pageNum.textContent = `page #${page + 1}`;

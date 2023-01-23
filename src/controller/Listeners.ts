@@ -58,7 +58,6 @@ class Listeners {
   static race() {
     const raceBtn = document.querySelector(".raceBtn");
     raceBtn?.addEventListener("click", () => {
-      Services.updateGaragePage();
       const messWin = document.querySelector(".messCont");
       if (messWin) messWin.parentNode?.removeChild(messWin);
       let num = 0;
@@ -68,19 +67,24 @@ class Listeners {
         num = 7;
       }
       if (Services.isRace === false && Services.countRace === num) {
+        Services.updateGaragePage();
         Services.countRace = 0;
         Services.isWin = false;
         Services.startRace("started");
       } else {
-        MessageRender.maintenance();
-        const btnOk = document.querySelector(".btnOk");
-        btnOk?.addEventListener("click", () => {
-          const field = document.querySelector(".field");
-          field?.parentNode?.removeChild(field);
-          Services.isRace = false;
-          Services.isWin = false;
-        });
+        Listeners.showMessage();
       }
+    });
+  }
+
+  static showMessage() {
+    MessageRender.maintenance();
+    const btnOk = document.querySelector(".btnOk");
+    btnOk?.addEventListener("click", () => {
+      const field = document.querySelector(".field");
+      field?.parentNode?.removeChild(field);
+      // Services.isRace = false;
+      Services.isWin = false;
     });
   }
 
@@ -90,16 +94,20 @@ class Listeners {
       if (Services.isRace === false) {
         Services.updateGaragePage();
         Services.startRace("stopped");
+      } else {
+        Listeners.showMessage();
       }
     });
   }
 
   static prew(sess: string, cName: string) {
     if (Number(sessionStorage.getItem(sess)) > 0) {
+      console.log("prew 1", sessionStorage.getItem(sess));
       sessionStorage.setItem(
         sess,
         JSON.stringify(Number(sessionStorage.getItem(sess)) - 1)
       );
+      console.log("prew 2", sessionStorage.getItem(sess));
     }
     const pageNum = document.querySelector(cName);
     if (pageNum)
@@ -108,16 +116,23 @@ class Listeners {
   }
 
   static next(sess: string, cName: string, num: number) {
-    const allCar = Crud.getAllCar();
-    allCar.then((el) => {
+    let all;
+    if (num === 10) {
+      all = Crud.getAllWinners();
+    } else {
+      all = Crud.getAllCar();
+    }
+    all.then((el) => {
       if (
         Math.ceil(el.length / num) >
         Number(sessionStorage.getItem(sess)) + 1
       ) {
+        console.log("next 1", sessionStorage.getItem(sess));
         sessionStorage.setItem(
-          "page",
+          sess,
           JSON.stringify(Number(sessionStorage.getItem(sess)) + 1)
         );
+        console.log("next 2", sessionStorage.getItem(sess));
       }
       const pageNum = document.querySelector(cName);
       if (pageNum)
