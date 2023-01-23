@@ -1,0 +1,105 @@
+.winListContainer {
+  display: flex;
+  flex-direction: column;
+  margin-left: 30px;
+  margin-top: 20px;
+  width: 620px;
+
+  & > div{
+    line-height: 25px;
+    text-align: center; 
+  }
+
+  .winListHeader {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+
+    & > div {
+      height: 25px;
+      background-color: rgba(59, 49, 166, 0.395);
+      border-radius: 4px;
+      line-height: 25px;
+      text-align: center;
+      margin: 0 3px;
+
+      &::after{
+        top: -28px;
+      }
+    }
+
+    .winListHeaderNum{
+      width: 60px;
+    }
+
+    .winListHeaderImage{
+      width: 240px;
+    }
+
+    .winListHeaderName{
+      width: 180px;
+    }
+
+    .winListHeaderCount{
+      width: 80px;
+    }
+    
+    .winListHeaderTime{
+      width: 120px;
+    }
+  }
+
+  .winnerBlock{
+    display: flex;
+    height: 50px;
+
+    & > p {
+      line-height: 50px;
+      color: rgb(255, 255, 86);
+      font-family: sans-serif;
+    }
+
+    .winNum{
+      width: 60px;
+    }
+
+    .winImage{
+      width: 110px;
+      margin: 0 60px;
+      -webkit-mask-image: url("https://raw.githubusercontent.com/Sedric14/assets/main/race/car.svg");
+      mask-image: url("https://raw.githubusercontent.com/Sedric14/assets/main/race/car.svg");
+      -webkit-mask-size: cover;
+      mask-size: cover;
+    }
+
+    .winName{
+      width: 180px;
+    }
+
+    .winCount{
+      width: 60px;
+    }
+    
+    .winTime{
+      width: 120px;
+    }
+  }
+}
+
+.winPrewNextBlock {
+  display: flex;
+  margin-top: 10px;
+  margin-left: 25px;
+
+  .prewNext {
+    height: 15px;
+    line-height: 15px;
+    margin: 0 5px;
+
+    &::after {
+      top: -14px;
+      border-radius: 3px;
+    }
+  }
+}

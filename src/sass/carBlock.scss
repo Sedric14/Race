@@ -1,10 +1,13 @@
+.carBlockContainer {
+  margin-top: 50px;
+}
+
 .carBlock {
-  position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
   border-bottom: 2px wheat dotted;
-  top: 50px;
+  margin-top: 20px;
 
   .btnBlock {
     width: 50%;
@@ -22,7 +25,7 @@
       margin-left: 10px;
     }
 
-    .nameCar{
+    .nameCar {
       color: aquamarine;
       margin-left: 25px;
       font-size: 120%;
@@ -36,7 +39,8 @@
     height: 50px;
     display: flex;
 
-    .letter{
+    .letter {
+      cursor: pointer;
       width: 30px;
       height: 30px;
       border: 2px solid gold;
@@ -48,23 +52,41 @@
       font-family: sans-serif;
     }
 
-    .btnA{
+    .disactiveBtn{
+      margin-top: 2.5px;
+      cursor: default;
+      width: 25px;
+      height: 25px;
+      border: 2px solid rgb(108, 92, 2);
+      color: rgb(108, 92, 2);
+    }
+
+    .btnA {
       margin-left: 30px;
     }
 
-    .btnB{
+    .btnB {
       margin-left: 5px;
     }
 
-    .car{
-      width: 110px;
+    .car {
+      position: relative;
+      width: 140px;
       height: 50px;
-      background: url("https://raw.githubusercontent.com/Sedric14/assets/main/race/car.svg");
       background-size: cover;
       margin-left: 10px;
+      mask-image: url("https://raw.githubusercontent.com/Sedric14/assets/main/race/car.svg");
+      -webkit-mask-size: cover;
+      mask-size: cover;
+
+      .carSvg{
+        display: block;
+        width: 500px;
+        height: 200px;
+      }
     }
 
-    .flag{
+    .flag {
       position: absolute;
       right: 150px;
       height: 50px;
@@ -74,3 +96,23 @@
     }
   }
 }
+
+.prewNextBlock {
+  display: flex;
+  margin-top: 10px;
+  margin-left: 25px;
+
+  .prewNext {
+    height: 15px;
+    line-height: 15px;
+    margin: 0 5px;
+
+    &::after {
+      top: -14px;
+      border-radius: 3px;
+    }
+  }
+}
+
+
+
