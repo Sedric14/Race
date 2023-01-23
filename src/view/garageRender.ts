@@ -7,6 +7,8 @@ import Services from "../model/Services";
 import App from "./app";
 
 class GaragePage extends Page {
+  static count: number;
+
   static createHeaderTitle(text: string) {
     const headerTitle = document.createElement("h1");
     headerTitle.textContent = `${text}`;
@@ -150,6 +152,7 @@ class GaragePage extends Page {
     const allCar = Crud.getAllCar();
     allCar.then((el) => {
       const carCount = el.length;
+      GaragePage.count = carCount;
       const title = document.querySelector(".garageTitle");
       if (title) title.textContent = `GARAGE (${carCount})`;
       el.forEach((i, ind) => {

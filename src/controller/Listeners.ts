@@ -5,6 +5,8 @@ import Crud from "../model/CrudServices";
 import { car } from "../model/Interfaces";
 import Services from "../model/Services";
 import App from "../view/app";
+import GaragePage from "../view/garageRender";
+import MessageRender from "../view/MessageRender";
 import WinnersPage from "../view/winnerRender";
 
 class Listeners {
@@ -56,9 +58,28 @@ class Listeners {
   static race() {
     const raceBtn = document.querySelector(".raceBtn");
     raceBtn?.addEventListener("click", () => {
-      if (Services.isRace === false && Services.countRace === 7) {
+      Services.updateGaragePage();
+      const messWin = document.querySelector(".messCont");
+      if (messWin) messWin.parentNode?.removeChild(messWin);
+      let num = 0;
+      if (GaragePage.count !== 0 && GaragePage.count < 7) {
+        num = GaragePage.count;
+      } else {
+        num = 7;
+      }
+      if (Services.isRace === false && Services.countRace === num) {
         Services.countRace = 0;
-        Services.startRace();
+        Services.isWin = false;
+        Services.startRace("started");
+      } else {
+        MessageRender.maintenance();
+        const btnOk = document.querySelector(".btnOk");
+        btnOk?.addEventListener("click", () => {
+          const field = document.querySelector(".field");
+          field?.parentNode?.removeChild(field);
+          Services.isRace = false;
+          Services.isWin = false;
+        });
       }
     });
   }
@@ -66,8 +87,10 @@ class Listeners {
   static reset() {
     const resetBtn = document.querySelector(".resetBtn");
     resetBtn?.addEventListener("click", () => {
-      Services.isRace = false;
-      Services.updateGaragePage();
+      if (Services.isRace === false) {
+        Services.updateGaragePage();
+        Services.startRace("stopped");
+      }
     });
   }
 

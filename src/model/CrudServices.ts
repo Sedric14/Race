@@ -83,8 +83,8 @@ class Crud {
         'Content-Type': 'application/json; charset=utf-8'
       },
     });
-    Services.updateGaragePage();
     Crud.deleteWin(id);
+    Services.updateGaragePage();
     return response.json();
   }
 

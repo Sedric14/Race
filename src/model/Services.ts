@@ -1,5 +1,5 @@
-/* eslint-disable no-console */
 /* eslint-disable prettier/prettier */
+/* eslint-disable no-console */
 /* eslint-disable import/no-cycle */
 import Listeners from "../controller/Listeners";
 import App from "../view/app";
@@ -20,9 +20,9 @@ class Services {
 
   static isRace = false;
 
-  static countRace = 7;
+  static isWin  = false;
 
-  static animIdArray: number[] = [];
+  static countRace = 7;
 
   static updateGaragePage() {
     const app = new App();
@@ -97,6 +97,7 @@ class Services {
   }
 
   static runAnim(id: number, status: string, btn: string) {
+    if(Services.isRace && btn === "B") return;
     const btnB = document.getElementById(`btnB${id}`);
     const btnA = document.getElementById(`btnA${id}`);
     if(btn === "A" && btnA?.classList.contains("disactiveBtn")) return;
@@ -118,27 +119,32 @@ class Services {
   static anim(vel: number, dist: number, id: number) {
     const driveStatus = Crud.driveStatus(id, "drive");
     const animCar = document.getElementById(`car${id}`) as HTMLElement;
+    if (vel === 0) animCar.style.left = "3000px";
     const width = window.innerWidth;
-    const speed = width / dist * 7.5 * vel;
+    const speed = width / dist * 7 * vel;
     let pos = 0;
     let st = 0;
     const startTime = Date.now();
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    const animId = requestAnimationFrame(animation);
-    Services.animIdArray.push(animId);
     function animation() {
-      animCar.style.left = `${pos += speed}px`;
-      if (pos < (width - 265) && st !== 500 && st!== 404) window.requestAnimationFrame(animation);
-      if (st === 500) Services.countRace += 1;
-      if (pos > (width - 265)) {
-          Services.countRace += 1;
-        const time = (Math.floor((Date.now() - startTime) / 10)) / 100;
-        if (Services.isRace ===  true) Services.showWinMessage(id, time);
-        Services.isRace = false;
+      if (pos < (width - 265) && st !== 500 && st!== 404 && animCar.style.left !== "3000px") {
+         window.requestAnimationFrame(animation);
       }
-      window.cancelAnimationFrame(animId)
+      if (st === 500 && Services.isRace ===  true) Services.countRace += 1;
+      if (pos > (width - 265) ) {
+          if (Services.isRace ===  true) Services.countRace += 1;
+          if (Services.countRace === 7) Services.isRace = false;
+        const time = (Math.floor((Date.now() - startTime) / 10)) / 100;
+        if (Services.isRace ===  true && Services.isWin === false) {
+          Services.showWinMessage(id, time);
+          Services.isWin = true;
+        } 
+      }
+      animCar.style.left = `${pos += speed}px`;
     }
-    driveStatus.then((k) => { st = k })
+    const animId = requestAnimationFrame(animation);
+    driveStatus.then((k) => {
+      if(k === 404) cancelAnimationFrame(animId);
+      st = k })
   }
 
   static showWinMessage(id: number, time: number) {
@@ -147,19 +153,19 @@ class Services {
     Car.then((i) => {
       name = i.name
       const garPage = document.querySelector("#garage");
-      garPage?.append(MessageRender.render(name, time));
+      garPage?.append(MessageRender.winnerMessage(name, time));
       Services.createWin(id, time);
     })
   }
 
-  static startRace() {
-    Services.isRace = true;
+  static startRace(stat: string) {
+    if(stat !== "stopped") Services.isRace = true;
     const arrayCars = Crud.getAllCar();
     arrayCars.then((arr) => {
       arr.forEach((i, ind) => {
         const page = Number(sessionStorage.getItem(App.sessions.garPage));
         if (ind >= (page * 7) && ind < ((page + 1) * 7)) {
-          if(i.id) Services.runAnim(i.id, "started", "none");
+          if(i.id) Services.runAnim(i.id, stat, "none");
         }
       })
     })
